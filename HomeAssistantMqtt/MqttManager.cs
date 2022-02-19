@@ -51,7 +51,7 @@ namespace HomeAssistantMqtt
 
         public void PublishDeviceDiscovery(string componentClass, DiscoveryMessage msg)
         {
-            string json = JsonConvert.SerializeObject(msg);
+            string json = JsonConvert.SerializeObject(msg, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
             MqttClient.PublishAsync($"homeassistant/{componentClass}/{msg.UniqueId}/config", json, retain: true);
         }
     }
