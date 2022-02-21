@@ -28,12 +28,16 @@ namespace HomeAssistantMqtt.Models
 
     public class SensorDiscoveryMessage : DiscoveryMessage
     {
-        // unit_of_measurement": "°C", "value_template": "{{ value_json.temperature
         [JsonProperty("unit_of_measurement")]
         public string MeasurementUnit { get; set; }
+
         [JsonProperty("value_template")]
         public string? ValueTemplate { get; set; }
+
         [JsonProperty("device_class")]
         public string DeviceClass { get; set; }
+
+        [JsonProperty("state_class")]
+        public string? StateClass { get; set; }
     }
 }
