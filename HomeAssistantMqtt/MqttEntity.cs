@@ -7,24 +7,24 @@ using HomeAssistantMqtt.Models;
 
 namespace HomeAssistantMqtt
 {
-    public class MqttDevice
+    public class MqttEntity
     {
         protected static readonly Logger log = LogManager.GetCurrentClassLogger();
         public string Route { get; }
-        public MqttDeviceMapping Mapping { get; }
+        public MqttEntityMapping Mapping { get; }
         public MqttManager Mqtt { get; }
-        public MqttDevice(MqttDeviceMapping mapping, MqttManager mqtt)
+        public MqttEntity(MqttEntityMapping mapping, MqttManager mqtt)
         {
             Route = mapping.Route;
             Mapping = mapping;
             Mqtt = mqtt;
         }
     }
-    public class MqttDevice<T> : MqttDevice where T : class
+    public class MqttEntity<T> : MqttEntity where T : class
     {
         public IDevice<T> Device { get; }
 
-        public MqttDevice(IDevice<T> device, MqttDeviceMapping mapping, MqttManager mqtt) : base(mapping, mqtt)
+        public MqttEntity(IDevice<T> device, MqttEntityMapping mapping, MqttManager mqtt) : base(mapping, mqtt)
         {
             Device = device;
 

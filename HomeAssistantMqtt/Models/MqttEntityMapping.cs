@@ -1,7 +1,7 @@
 ﻿
 namespace HomeAssistantMqtt.Models
 {
-    public class MqttDeviceMapping
+    public class MqttEntityMapping
     {
         public string DeviceId { get; set; }
         public string Name { get; set; }

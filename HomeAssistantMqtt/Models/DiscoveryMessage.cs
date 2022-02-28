@@ -18,9 +18,15 @@ namespace HomeAssistantMqtt.Models
 
         [JsonProperty("stat_t")]
         public string? StateTopic { get; set; }
+
+        [JsonProperty("availability_topic")]
+        public string? AvailabilityTopic { get; set; }
+
+        [JsonProperty("device")]
+        public MqttDevice? Device { get; set; }
     }
 
-    public class DimmerLatchDiscoveryMessage : DiscoveryMessage
+    public class BrightnessLightDiscoveryMessage : DiscoveryMessage
     {
         [JsonProperty("brightness")]
         public bool? Brightness { get; set; }

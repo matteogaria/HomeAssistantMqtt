@@ -54,5 +54,10 @@ namespace HomeAssistantMqtt
             string json = JsonConvert.SerializeObject(msg, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
             MqttClient.PublishAsync($"homeassistant/{componentClass}/{msg.UniqueId}/config", json, retain: true);
         }
+
+        public void PublishBirth()
+        {
+            MqttClient.PublishAsync($"", qualityOfServiceLevel: 
+        }
     }
 }
