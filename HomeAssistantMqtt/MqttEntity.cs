@@ -11,9 +11,9 @@ namespace HomeAssistantMqtt
     {
         protected static readonly Logger log = LogManager.GetCurrentClassLogger();
         public string Route { get; }
-        public MqttEntityMapping Mapping { get; }
-        public MqttManager Mqtt { get; }
-        public MqttEntity(MqttEntityMapping mapping, MqttManager mqtt)
+        public MqttEntityDescriptor Mapping { get; }
+        public MqttDevice Mqtt { get; }
+        public MqttEntity(MqttEntityDescriptor mapping, MqttDevice mqtt)
         {
             Route = mapping.Route;
             Mapping = mapping;
@@ -24,7 +24,7 @@ namespace HomeAssistantMqtt
     {
         public IDevice<T> Device { get; }
 
-        public MqttEntity(IDevice<T> device, MqttEntityMapping mapping, MqttManager mqtt) : base(mapping, mqtt)
+        public MqttEntity(IDevice<T> device, MqttEntityDescriptor mapping, MqttDevice mqtt) : base(mapping, mqtt)
         {
             Device = device;
 
@@ -54,7 +54,7 @@ namespace HomeAssistantMqtt
             {
                 DiscoveryMessage message = device.GetDiscoveryMessage();
                 message.Name = Mapping.Name;
-                message.UniqueId = Mapping.DeviceId;
+                message.UniqueId = Mapping.EntityId;
                 message.CommandTopic = $"{Route}/set";
                 message.StateTopic = $"{Route}/state";
                 message.Schema = "json";

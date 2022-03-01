@@ -7,19 +7,21 @@ using NLog;
 using Newtonsoft.Json;
 
 using MQTTnet.Extensions.ManagedClient;
+using MQTTnet.Client;
+using MQTTnet;
 
 using HomeAssistantMqtt.Models;
 
 namespace HomeAssistantMqtt
 {
-    public class MqttManager
+    public class MqttDevice
     {
         protected static readonly Logger log = LogManager.GetCurrentClassLogger();
 
-        public MqttManager(ManagedMqttClient mqttClient)
+        public MqttDevice(ManagedMqttClient mqttClient, MqttDeviceDescriptor device)
         {
             MqttClient = mqttClient;
-
+            Device = device;
             MqttClient.ApplicationMessageReceivedAsync += async (e) =>
             {
                 await Task.Run(() =>
@@ -34,6 +36,7 @@ namespace HomeAssistantMqtt
 
         protected Dictionary<string, Action<string>> Routes { get; } = new Dictionary<string, Action<string>>();
         public ManagedMqttClient MqttClient { get; }
+        public MqttDeviceDescriptor Device { get; }
 
         public bool RegisterRoute(string route, Action<string> callback)
         {
@@ -51,13 +54,25 @@ namespace HomeAssistantMqtt
 
         public void PublishDeviceDiscovery(string componentClass, DiscoveryMessage msg)
         {
+            msg.Device = Device;
             string json = JsonConvert.SerializeObject(msg, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
-            MqttClient.PublishAsync($"homeassistant/{componentClass}/{msg.UniqueId}/config", json, retain: true);
+            MqttClient.PublishAsync($"homeassistant/{componentClass}/{Device.Id}/{msg.UniqueId}/config", json, retain: true).Wait();
         }
 
-        public void PublishBirth()
+        public static ManagedMqttClient CreateMqttClient(MqttBrokerConfiguration cfg)
         {
-            MqttClient.PublishAsync($"", qualityOfServiceLevel: 
+            var options = new ManagedMqttClientOptionsBuilder()
+              .WithAutoReconnectDelay(TimeSpan.FromSeconds(5))
+              .WithClientOptions(new MqttClientOptionsBuilder()
+                  .WithClientId(cfg.ClientId)
+                  .WithTcpServer(cfg.IpAddress)
+                  .WithCredentials(cfg.Username, cfg.Password)
+                  .Build())
+              .Build();
+
+            var mqttClient = new MqttFactory().CreateManagedMqttClient();
+            mqttClient.StartAsync(options).Wait();
+            return mqttClient;
         }
     }
 }

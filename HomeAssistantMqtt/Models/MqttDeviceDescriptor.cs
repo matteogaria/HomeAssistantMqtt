@@ -2,17 +2,17 @@
 
 namespace HomeAssistantMqtt.Models
 {
-    public class MqttDevice
+    public class MqttDeviceDescriptor
     {
-        [JsonProperty("identifiers")]
+        [JsonProperty("ids")]
         public string Id { get; set; }
         [JsonProperty("name")]
         public string Name { get; set; }
-        [JsonProperty("sw_version")]
+        [JsonProperty("sw")]
         public string SoftwareVersion { get; set; }
-        [JsonProperty("model")]
+        [JsonProperty("mdl")]
         public string Model { get; set; }
-        [JsonProperty("manufactorer")]
+        [JsonProperty("mf")]
         public string Manufactorer { get; set; }
     }
 }

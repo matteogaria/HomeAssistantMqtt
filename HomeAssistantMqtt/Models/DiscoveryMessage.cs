@@ -22,8 +22,8 @@ namespace HomeAssistantMqtt.Models
         [JsonProperty("availability_topic")]
         public string? AvailabilityTopic { get; set; }
 
-        [JsonProperty("device")]
-        public MqttDevice? Device { get; set; }
+        [JsonProperty("dev")]
+        public MqttDeviceDescriptor? Device { get; set; }
     }
 
     public class BrightnessLightDiscoveryMessage : DiscoveryMessage
