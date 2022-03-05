@@ -11,11 +11,13 @@ namespace HomeAssistantMqtt
     {
         protected static readonly Logger log = LogManager.GetCurrentClassLogger();
         public string Route { get; }
+        public string[] ExtraRoutes { get; }
         public MqttEntityDescriptor Mapping { get; }
         public MqttDevice Mqtt { get; }
-        public MqttEntity(MqttEntityDescriptor mapping, MqttDevice mqtt)
+        public MqttEntity(MqttEntityDescriptor mapping, MqttDevice mqtt, string[] extraRoutes = null)
         {
             Route = mapping.Route;
+            ExtraRoutes = extraRoutes;
             Mapping = mapping;
             Mqtt = mqtt;
         }
@@ -24,7 +26,7 @@ namespace HomeAssistantMqtt
     {
         public IDevice<T> Device { get; }
 
-        public MqttEntity(IDevice<T> device, MqttEntityDescriptor mapping, MqttDevice mqtt) : base(mapping, mqtt)
+        public MqttEntity(IDevice<T> device, MqttEntityDescriptor mapping, MqttDevice mqtt, string[] extraRoutes = null) : base(mapping, mqtt, extraRoutes)
         {
             Device = device;
 
@@ -43,6 +45,10 @@ namespace HomeAssistantMqtt
                     log.Warn(ex, $"{Route}/set: Invalid payload received");
                 }
             });
+
+            if(extraRoutes != null)
+                foreach(string route in extraRoutes)
+                    Mqtt.RegisterRoute($"{Route}/{route}", (msg) => device.MessageNotification(route, msg));
 
             if (mapping.UpdateOnStart)
             {
