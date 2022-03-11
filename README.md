@@ -10,6 +10,11 @@ This is not a complete software, it's just a quick library that I've written in 
 I have tested this library only with HA light and sensor entities, it's very likely that adjustments must be made for other entities.
 So, that's not for beginners, a basic understanding of MQTT, HA mqtt discovery, HA device/entity concepts and C# language is needed.
 
+## References
+Home Assistant MQTT: https://www.home-assistant.io/integrations/mqtt/
+
+MQTTnet: https://github.com/dotnet/MQTTnet
+
 ## Usage
 
 ### MQTT Connection
