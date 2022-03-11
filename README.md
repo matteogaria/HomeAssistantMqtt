@@ -12,6 +12,7 @@ So, that's not for beginners, a basic understanding of MQTT, HA mqtt discovery, 
 
 ## References
 Home Assistant MQTT: https://www.home-assistant.io/integrations/mqtt/
+
 MQTTnet: https://github.com/dotnet/MQTTnet
 
 ## Usage
