@@ -17,21 +17,21 @@ namespace HomeAssistantMqtt.Demo
         public bool On { get => State.ToLower() == "on"; set => State = value ? "ON" : "OFF"; }
     }
 
-    public class Light : IDevice<LightMessage>
+    public class Light : IJsonEntity<LightMessage>
     {
-        public Action<LightMessage> StatusNotification { get; set; }
+        public Action<object> StatusNotification { get; set; }
 
         public void CommandNotification(LightMessage command)
         {
-            Console.WriteLine($"Received Command status: {command?.State} brightness: {command?.Brightness}");
+            Console.WriteLine($"SampleLight: received command: {command?.State} brightness: {command?.Brightness}");
             StatusNotification?.Invoke(command);
         }
 
         // nothing to customize here
         public DiscoveryMessage GetDiscoveryMessage()
-            => new DiscoveryMessage();
+            => new BrightnessLightDiscoveryMessage { Brightness = true };
 
-        public LightMessage GetStatus()
+        public object GetStatus()
             => new LightMessage() { On = false, Brightness = 0 };
 
         public void MessageNotification(string topic, string msg)

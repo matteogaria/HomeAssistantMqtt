@@ -13,9 +13,9 @@ namespace HomeAssistantMqtt.Demo
             MqttBrokerConfiguration broker = new MqttBrokerConfiguration
             {
                 ClientId = "sampleClient",
-                IpAddress = "192.168.1.100",
-                Username = "sampleUser",
-                Password = "samplePassword"
+                IpAddress = "10.39.24.141",
+                Username = "device",
+                Password = "device"
             };
 
             // Sample device
@@ -39,11 +39,21 @@ namespace HomeAssistantMqtt.Demo
                 UpdateOnStart = true,
             };
 
+            // Sample sensor
+            MqttEntityDescriptor sensorDescriptor = new MqttEntityDescriptor
+            {
+                ComponentClass = "sensor",
+                EntityId = "sampleSensor",
+                Name = "MQTT Sample Sensor",
+                Publish = true,
+                Route = "sample/sensor",
+                UpdateOnStart = true,
+            };
+
             ManagedMqttClient mqttClient = MqttDevice.CreateMqttClient(broker);
             MqttDevice mqttDevice = new MqttDevice(mqttClient, deviceDescriptor);
-
-            MqttEntity<LightMessage> sampleLightEntity = new MqttEntity<LightMessage>(new Light(), lightDescriptor, mqttDevice);
-
+            _ = new MqttEntity<LightMessage>(new Light(), lightDescriptor, mqttDevice);
+            _ = new MqttEntity(new Sensor(), sensorDescriptor, mqttDevice);
 
             Console.ReadLine();
         }
